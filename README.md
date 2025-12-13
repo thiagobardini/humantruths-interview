@@ -4,22 +4,25 @@ Voice interview analytics dashboard with Retell AI integration.
 
 ## Tech Stack
 
-- Next.js 15 (App Router)
-- Drizzle ORM + Vercel Postgres
-- shadcn/ui + Tailwind CSS
-- Zod validation
-- Retell AI SDK
+- **Next.js 16** (App Router)
+- **Drizzle ORM** + Supabase Postgres
+- **shadcn/ui** + Tailwind CSS
+- **Zod** validation
+- **Retell AI** SDK
 
 ## Setup
 
 ```bash
 npm install
-cp .env.example .env.local
+cp .env.example .env
 ```
 
-Add your credentials to `.env.local`:
-- `POSTGRES_URL` - Vercel Postgres connection string
-- `RETELL_API_KEY` - Your Retell AI API key
+## Environment Variables
+
+```env
+DATABASE_POSTGRES_URL=postgresql://...
+RETELL_API_KEY=your_retell_api_key
+```
 
 ## Development
 
@@ -30,15 +33,16 @@ npm run dev
 ## Database
 
 ```bash
-npx drizzle-kit generate
-npx drizzle-kit push
+npm run db:generate   # Generate migrations
+npm run db:push       # Push schema to database
+npm run db:studio     # Open Drizzle Studio
 ```
 
 ## Retell Webhook
 
 Configure in Retell dashboard:
 ```
-POST https://your-domain.vercel.app/api/webhooks/retell
+POST https://humantruths-interview.vercel.app/api/webhooks/retell
 ```
 
 ## Features
