@@ -1,0 +1,196 @@
+{
+  "agent_id": "",
+  "channel": "voice",
+  "last_modification_timestamp": 1765739239036,
+  "agent_name": "HumanTruths-PROD-Blocks",
+  "response_engine": {
+    "type": "conversation-flow",
+    "version": 1,
+    "conversation_flow_id": "conversation_flow_39cbc676cd93"
+  },
+  "webhook_url": "https://humantruths-interview.vercel.app/api/webhooks/retell",
+  "language": "multi",
+  "data_storage_setting": "everything",
+  "opt_in_signed_url": false,
+  "version": 1,
+  "is_published": false,
+  "version_title": "v0-  vercel webhook url",
+  "post_call_analysis_model": "gpt-4.1-mini",
+  "pii_config": {
+    "mode": "post_call",
+    "categories": []
+  },
+  "voice_id": "11labs-Cimo",
+  "max_call_duration_ms": 3600000,
+  "interruption_sensitivity": 0.9,
+  "allow_user_dtmf": true,
+  "user_dtmf_options": {},
+  "conversationFlow": {
+    "conversation_flow_id": "conversation_flow_39cbc676cd93",
+    "version": 1,
+    "global_prompt": "You are a friendly interviewer conducting a brief 2-minute interview. \n\nYour task:\n1. First, ask if the user is a woman\n2. If they are NOT a woman, politely thank them and end the call\n3. If they ARE a woman, ask: \"What's your favorite food and why?\"\n4. After they answer, thank them and end the call\n\nBe concise and professional. Keep the interview under 2 minutes.\n",
+    "nodes": [
+      {
+        "instruction": {
+          "type": "prompt",
+          "text": "You are conducting a 2-minute test interview. Filter for users who \"are women\"."
+        },
+        "name": "Welcome Node",
+        "edges": [
+          {
+            "destination_node_id": "node-1765731329169",
+            "id": "edge-1",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Contains: yes/woman/female"
+            }
+          },
+          {
+            "destination_node_id": "node-1765730260214",
+            "id": "edge-2",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Contains: no/man/male/guy"
+            }
+          }
+        ],
+        "start_speaker": "agent",
+        "id": "start-node-1765729723853",
+        "type": "conversation",
+        "display_position": {
+          "x": 550,
+          "y": 0
+        }
+      },
+      {
+        "name": "Main Question Block",
+        "edges": [
+          {
+            "destination_node_id": "node-1765731729954",
+            "id": "edge-1765729864878-ge8nmly19",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "User Request: Wait for users to provide food information and their reasons for liking it."
+            }
+          }
+        ],
+        "id": "node-1765729864878",
+        "type": "conversation",
+        "display_position": {
+          "x": 1650,
+          "y": 20
+        },
+        "instruction": {
+          "type": "static_text",
+          "text": "What's your favorite food and why?"
+        }
+      },
+      {
+        "name": "End Call",
+        "id": "node-1765730260214",
+        "type": "end",
+        "speak_during_execution": true,
+        "display_position": {
+          "x": 1100,
+          "y": 467.5
+        },
+        "instruction": {
+          "type": "static_text",
+          "text": "Thank you, have a great day!"
+        }
+      },
+      {
+        "name": "End Call",
+        "id": "node-1765730275696",
+        "type": "end",
+        "speak_during_execution": true,
+        "display_position": {
+          "x": 2750,
+          "y": 65
+        },
+        "instruction": {
+          "type": "static_text",
+          "text": "Thank you for sharing! Have a great day!"
+        }
+      },
+      {
+        "name": "Extract Variables",
+        "edges": [
+          {
+            "destination_node_id": "node-1765729864878",
+            "id": "edge-1765731329169-ybwr3757r",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Whether the user identifies as a woman"
+            }
+          }
+        ],
+        "variables": [
+          {
+            "name": "is_woman",
+            "description": "Whether the user identifies as a woman",
+            "type": "boolean",
+            "choices": []
+          }
+        ],
+        "id": "node-1765731329169",
+        "type": "extract_dynamic_variables",
+        "display_position": {
+          "x": 1100,
+          "y": 12.5
+        }
+      },
+      {
+        "name": "Extract Variables",
+        "edges": [
+          {
+            "destination_node_id": "node-1765730275696",
+            "id": "edge-1765731963334-0aj8qupay",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "After the user answers about their favorite food and food reason, extract the food name and food reason."
+            }
+          }
+        ],
+        "variables": [
+          {
+            "name": "favorite_food",
+            "description": "The user's favorite food",
+            "type": "string",
+            "choices": []
+          },
+          {
+            "name": "food_reason",
+            "description": "Why it's their favorite food",
+            "type": "string",
+            "choices": []
+          }
+        ],
+        "id": "node-1765731729954",
+        "type": "extract_dynamic_variables",
+        "display_position": {
+          "x": 2200,
+          "y": 0
+        }
+      }
+    ],
+    "components": [],
+    "start_node_id": "start-node-1765729723853",
+    "start_speaker": "agent",
+    "model_choice": {
+      "type": "cascading",
+      "model": "gpt-4.1"
+    },
+    "tool_call_strict_mode": true,
+    "knowledge_base_ids": [],
+    "kb_config": {
+      "top_k": 3,
+      "filter_score": 0.6
+    },
+    "begin_tag_display_position": {
+      "x": 0,
+      "y": 65
+    },
+    "is_published": false
+  }
+}

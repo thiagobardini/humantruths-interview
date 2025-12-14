@@ -6,11 +6,18 @@ A mini voice interview platform that receives webhooks from Retell AI, stores in
 
 ## Tech Stack
 
-- **Next.js 16** (App Router, TypeScript strict mode)
+- **Next.js 15** (App Router, React 19, TypeScript strict mode)
 - **Drizzle ORM** + Supabase Postgres - [Documentation](https://orm.drizzle.team/docs/get-started/supabase-new)
-- **shadcn/ui** + Tailwind CSS
+- **shadcn/ui** + Tailwind CSS v4
 - **Zod** validation - [Documentation](https://zod.dev/?id=objects)
-- **Retell AI** SDK
+- **Retell AI** SDK with Conversation Flow
+
+---
+
+## Documentation
+
+- [`docs/retell/retell-integration.md`](./docs/retell/retell-integration.md) - How the Retell AI integration works
+- [`docs/retell/retell-agent-config.json`](./docs/retell/retell-agent-config.json) - Full agent configuration
 
 ---
 
@@ -20,14 +27,23 @@ A mini voice interview platform that receives webhooks from Retell AI, stores in
 src/
 ├── app/
 │   ├── api/webhooks/retell/route.ts   → Webhook receiver
-│   ├── dashboard/page.tsx              → Analytics
-│   └── interview/[callId]/page.tsx     → Detail view
+│   ├── dashboard/page.tsx              → Analytics dashboard
+│   └── interview/[callId]/page.tsx     → Interview detail view
+├── components/
+│   ├── dashboard/                      → Dashboard components
+│   ├── interview/                      → Interview detail components
+│   └── ui/                             → Reusable UI components
 ├── db/
-│   ├── schema.ts                       → Drizzle schema
+│   ├── schema.ts                       → Drizzle schema + types
 │   └── index.ts                        → DB connection
 ├── lib/
+│   ├── types.ts                        → Centralized type exports
+│   ├── utils/                          → Utility functions
 │   └── validations/retell.ts           → Zod schemas
-drizzle.config.ts                        → Drizzle config
+docs/
+└── retell/
+    ├── retell-integration.md           → Retell AI integration docs
+    └── retell-agent-config.json        → Agent configuration
 ```
 
 ---
@@ -190,21 +206,52 @@ After a webhook is received, check logs in:
 
 ## Trade-offs & Assumptions
 
-### Question Analytics Limitation
-The question-by-question analytics uses **exact string matching** to group questions. Since AI agents speak dynamically, the same logical question may have slightly different wording across interviews. This means some questions won't group together perfectly.
+### Extract Dynamic Variables vs Transcript Parsing
+Instead of parsing transcripts with regex/AI to extract answers, I used Retell's **Extract Dynamic Variables** feature. This gives us structured data (`is_woman`, `favorite_food`, `food_reason`) directly from the conversation flow.
 
-**Production solution:** Use an AI classification service (via n8n webhook or similar) to normalize questions into canonical categories.
+**Why:** More reliable, no parsing errors, works regardless of how the user phrases their answer.
+
+**Trade-off:** Requires using Conversation Flow with Blocks instead of Single Prompt mode.
+
+See: [`docs/retell/retell-integration.md`](./docs/retell/retell-integration.md)
+
+### JSON Column for Extracted Variables
+Extracted variables are stored in a JSON column (`extracted_variables`) rather than separate columns.
+
+**Why:** Flexible schema - can add new variables without migrations. Easy to extend for different interview types.
+
+**Trade-off:** Can't query individual fields with SQL WHERE clauses. For production, consider adding a GIN index or separate columns for frequently queried fields.
+
+### Server Components with force-dynamic
+Dashboard and interview pages use Server Components with `force-dynamic` to always fetch fresh data.
+
+**Why:** Simpler than client-side state management. No stale data issues.
+
+**Trade-off:** Every page load hits the database. For high traffic, add caching or ISR.
+
+### Manual Refresh vs Auto-Polling
+Added a Refresh button instead of automatic polling.
+
+**Why:** Data changes infrequently (when interviews complete). Polling wastes resources.
+
+**Trade-off:** User must click to see new data. Could add Server-Sent Events for real-time updates in production.
 
 ### Sequential Participant IDs
-Participant IDs are generated as `participant-1`, `participant-2`, etc. using `COUNT(*)`. This has a theoretical race condition with concurrent requests, but is acceptable for an MVP.
+Participant IDs are generated as `participant-1`, `participant-2`, etc. using `COUNT(*)`.
+
+**Trade-off:** Theoretical race condition with concurrent requests. Acceptable for MVP.
 
 **Production solution:** Use database sequences or UUID-based IDs.
 
-### Real vs Mock Signature Validation
-The project spec suggested "mock validation," but I implemented **real signature validation** using the Retell SDK (`Retell.verify()`). This is more secure and production-ready.
+### Real Signature Validation
+The project spec suggested "mock validation," but I implemented **real signature validation** using the Retell SDK (`Retell.verify()`).
 
-### Next.js 16
-Used Next.js 16 (latest) instead of 14+ as specified. The App Router API is the same, with improved performance.
+**Why:** More secure and production-ready. Same amount of code.
+
+### Next.js 15 + React 19
+Used Next.js 15 with React 19 instead of 14+ as specified.
+
+**Why:** Latest stable version with improved performance. App Router API is the same.
 
 ---
 
