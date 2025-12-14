@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { Retell } from 'retell-sdk'
 import { eq, count } from 'drizzle-orm'
 import { db } from '@/db'
@@ -109,6 +110,9 @@ export async function POST(request: NextRequest) {
     }
 
     console.log(`✅ Interview saved: ${call.call_id}`)
+
+    // Revalidate dashboard to show fresh data
+    revalidatePath('/dashboard')
 
     return NextResponse.json({ message: 'Success' }, { status: 200 })
   } catch (error) {
