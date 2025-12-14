@@ -1,9 +1,8 @@
 'use client'
 
-import { useState } from 'react'
-import { Copy, Check } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { CopyButton } from '@/components/ui/copy-button'
 import type { ExtractedVariables } from '@/lib/types'
 
 interface InterviewSummaryCardProps {
@@ -13,30 +12,6 @@ interface InterviewSummaryCardProps {
   time: string
   callId: string
   extractedVariables: ExtractedVariables | null
-}
-
-function CopyIcon({ text, label }: { text: string; label: string }) {
-  const [copied, setCopied] = useState(false)
-
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(text)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
-
-  return (
-    <button
-      onClick={handleCopy}
-      className="p-1 hover:bg-muted rounded transition-colors"
-      title={`${label}: ${text}`}
-    >
-      {copied ? (
-        <Check className="h-3.5 w-3.5 text-emerald-500" />
-      ) : (
-        <Copy className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground" />
-      )}
-    </button>
-  )
 }
 
 export function InterviewSummaryCard({
@@ -81,7 +56,7 @@ export function InterviewSummaryCard({
             <p className="text-xs text-muted-foreground mb-1">Call ID</p>
             <div className="flex items-center gap-1">
               <p className="text-sm font-mono truncate max-w-[120px]">{callId}</p>
-              <CopyIcon text={callId} label="Copy Call ID" />
+              <CopyButton text={callId} label="Copy Call ID" />
             </div>
           </div>
         </div>

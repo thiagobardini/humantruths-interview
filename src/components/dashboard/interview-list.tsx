@@ -1,12 +1,12 @@
 'use client'
 
 import Link from 'next/link'
-import { Copy, Check } from 'lucide-react'
 import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { FilterButtons, type FilterOption } from '@/components/ui/filter-buttons'
+import { CopyButton } from '@/components/ui/copy-button'
 import type { Interview } from '@/lib/types'
 
 interface InterviewListProps {
@@ -20,32 +20,6 @@ const FILTER_OPTIONS: FilterOption<FilterType>[] = [
   { value: 'woman', label: 'Woman' },
   { value: 'not-woman', label: 'Not woman' },
 ]
-
-function CopyButton({ text, label }: { text: string; label: string }) {
-  const [copied, setCopied] = useState(false)
-
-  const handleCopy = async (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    await navigator.clipboard.writeText(text)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
-
-  return (
-    <button
-      onClick={handleCopy}
-      className="p-1.5 hover:bg-muted rounded transition-colors group relative"
-      title={`${label}: ${text}`}
-    >
-      {copied ? (
-        <Check className="h-4 w-4 text-emerald-500" />
-      ) : (
-        <Copy className="h-4 w-4 text-muted-foreground group-hover:text-foreground" />
-      )}
-    </button>
-  )
-}
 
 function formatDate(date: Date) {
   return new Intl.DateTimeFormat('en-US', {
