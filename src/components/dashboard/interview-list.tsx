@@ -3,14 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
-
-interface Interview {
-  id: string
-  callId: string
-  participantId: string | null
-  duration: number
-  completionStatus: string
-}
+import type { Interview } from '@/lib/types'
 
 interface InterviewListProps {
   interviews: Interview[]

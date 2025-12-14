@@ -1,13 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
-
-interface Message {
-  role: string
-  content: string
-}
+import type { TranscriptMessage } from '@/lib/types'
 
 interface TranscriptViewProps {
-  messages: Message[] | null
+  messages: TranscriptMessage[] | null
 }
 
 export function TranscriptView({ messages }: TranscriptViewProps) {

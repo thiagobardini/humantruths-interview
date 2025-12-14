@@ -1,11 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
-
-interface TranscriptMessage {
-  role: string
-  content: string
-}
+import type { TranscriptMessage } from '@/lib/types'
 
 interface QuestionData {
   question: string
