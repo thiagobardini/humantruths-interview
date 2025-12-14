@@ -1,11 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Retell } from 'retell-sdk'
-import { eq } from 'drizzle-orm'
+import { eq, count } from 'drizzle-orm'
 import { db } from '@/db'
 import { interviews } from '@/db/schema'
 import { RetellWebhookSchema } from '@/lib/validations/retell'
 
-// 1. Validate signature using Retell SDK
+/**
+ * Retell AI Webhook Endpoint
+ *
+ * This endpoint receives webhook events from Retell AI after voice calls.
+ * It processes 3 event types: call_started, call_ended, call_analyzed
+ *
+ * Security: Uses HMAC signature validation via Retell SDK
+ * Docs: https://docs.retellai.com/features/webhook-overview
+ */
+
+/**
+ * Validates the webhook signature using Retell SDK
+ * This ensures the request is from Retell and hasn't been tampered with
+ *
+ * @param request - The incoming request with x-retell-signature header
+ * @param body - The raw request body string
+ * @returns boolean - True if signature is valid
+ */
 function validateSignature(request: NextRequest, body: string): boolean {
   const signature = request.headers.get('x-retell-signature')
   if (!signature) return false
@@ -79,12 +96,12 @@ export async function POST(request: NextRequest) {
     } else {
       // Generate sequential participant ID if not provided
       // In production, this would come from user authentication
-      const count = await db.select().from(interviews)
-      const generatedId = `participant-${count.length + 1}`
+      const [{ value }] = await db.select({ value: count() }).from(interviews)
+      const generatedId = `participant-${value + 1}`
 
       await db.insert(interviews).values({
         callId: call.call_id,
-        participantId: call.metadata?.participant_id ?? generatedId,
+        participantId: (call.metadata?.participant_id as string) ?? generatedId,
         transcript,
         duration,
         completionStatus,
