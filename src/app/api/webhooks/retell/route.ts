@@ -86,14 +86,8 @@ export async function POST(request: NextRequest) {
       : call.disconnection_reason ?? 'ended'
 
     // Extract dynamic variables from Retell conversation flow
-    // Always include is_woman as boolean (true if "true", false otherwise)
-    const rawVariables = call.collected_dynamic_variables
-    const extractedVariables = rawVariables
-      ? {
-          ...rawVariables,
-          is_woman: rawVariables.is_woman === 'true',
-        }
-      : null
+    // Zod already transforms is_woman from "true" to boolean true
+    const extractedVariables = call.collected_dynamic_variables ?? null
 
     if (existing.length > 0) {
       await db
