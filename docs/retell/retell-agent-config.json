@@ -1,20 +1,20 @@
 {
   "agent_id": "",
   "channel": "voice",
-  "last_modification_timestamp": 1765739239036,
+  "last_modification_timestamp": 1765839112186,
   "agent_name": "HumanTruths-PROD-Blocks",
   "response_engine": {
     "type": "conversation-flow",
-    "version": 1,
-    "conversation_flow_id": "conversation_flow_39cbc676cd93"
+    "version": 2,
+    "conversation_flow_id": "conversation_flow_2f348073ad9f"
   },
   "webhook_url": "https://humantruths-interview.vercel.app/api/webhooks/retell",
   "language": "multi",
   "data_storage_setting": "everything",
   "opt_in_signed_url": false,
-  "version": 1,
+  "version": 2,
   "is_published": false,
-  "version_title": "v0-  vercel webhook url",
+  "version_title": "V2 - ngrok webhook url",
   "post_call_analysis_model": "gpt-4.1-mini",
   "pii_config": {
     "mode": "post_call",
@@ -26,14 +26,14 @@
   "allow_user_dtmf": true,
   "user_dtmf_options": {},
   "conversationFlow": {
-    "conversation_flow_id": "conversation_flow_39cbc676cd93",
-    "version": 1,
+    "conversation_flow_id": "conversation_flow_2f348073ad9f",
+    "version": 2,
     "global_prompt": "You are a friendly interviewer conducting a brief 2-minute interview. \n\nYour task:\n1. First, ask if the user is a woman\n2. If they are NOT a woman, politely thank them and end the call\n3. If they ARE a woman, ask: \"What's your favorite food and why?\"\n4. After they answer, thank them and end the call\n\nBe concise and professional. Keep the interview under 2 minutes.\n",
     "nodes": [
       {
         "instruction": {
           "type": "prompt",
-          "text": "You are conducting a 2-minute test interview. Filter for users who \"are women\"."
+          "text": "You are conducting a 2-minute test interview. Filter for users who “are women” ."
         },
         "name": "Welcome Node",
         "edges": [
@@ -46,11 +46,11 @@
             }
           },
           {
-            "destination_node_id": "node-1765730260214",
+            "destination_node_id": "node-1765811718400",
             "id": "edge-2",
             "transition_condition": {
               "type": "prompt",
-              "prompt": "Contains: no/man/male/guy"
+              "prompt": "Contains: no/man/male/guy "
             }
           }
         ],
@@ -58,31 +58,31 @@
         "id": "start-node-1765729723853",
         "type": "conversation",
         "display_position": {
-          "x": 550,
-          "y": 0
+          "x": 615.9187211122122,
+          "y": 1.8833920317774941
         }
       },
       {
-        "name": "Main Question Block",
+        "name": "Favorite food",
         "edges": [
           {
             "destination_node_id": "node-1765731729954",
             "id": "edge-1765729864878-ge8nmly19",
             "transition_condition": {
               "type": "prompt",
-              "prompt": "User Request: Wait for users to provide food information and their reasons for liking it."
+              "prompt": "Wait for users to provide their favorite food.\n"
             }
           }
         ],
         "id": "node-1765729864878",
         "type": "conversation",
         "display_position": {
-          "x": 1650,
-          "y": 20
+          "x": 1390.1918657189176,
+          "y": -52.19155099255291
         },
         "instruction": {
           "type": "static_text",
-          "text": "What's your favorite food and why?"
+          "text": "What's your favorite food?"
         }
       },
       {
@@ -91,8 +91,8 @@
         "type": "end",
         "speak_during_execution": true,
         "display_position": {
-          "x": 1100,
-          "y": 467.5
+          "x": 1437.7378981228858,
+          "y": 378.7532907354189
         },
         "instruction": {
           "type": "static_text",
@@ -105,8 +105,8 @@
         "type": "end",
         "speak_during_execution": true,
         "display_position": {
-          "x": 2750,
-          "y": 65
+          "x": 2197.9655564542486,
+          "y": 104.05153546414185
         },
         "instruction": {
           "type": "static_text",
@@ -136,19 +136,19 @@
         "id": "node-1765731329169",
         "type": "extract_dynamic_variables",
         "display_position": {
-          "x": 1100,
-          "y": 12.5
+          "x": 1005.3153594097687,
+          "y": -19.73289410752077
         }
       },
       {
         "name": "Extract Variables",
         "edges": [
           {
-            "destination_node_id": "node-1765730275696",
+            "destination_node_id": "node-1765813984134",
             "id": "edge-1765731963334-0aj8qupay",
             "transition_condition": {
               "type": "prompt",
-              "prompt": "After the user answers about their favorite food and food reason, extract the food name and food reason."
+              "prompt": "After the user answers about their favorite food extract the food name."
             }
           }
         ],
@@ -158,7 +158,78 @@
             "description": "The user's favorite food",
             "type": "string",
             "choices": []
-          },
+          }
+        ],
+        "id": "node-1765731729954",
+        "type": "extract_dynamic_variables",
+        "display_position": {
+          "x": 1431.345251213932,
+          "y": -411.65524513017914
+        }
+      },
+      {
+        "name": "Extract Variables",
+        "edges": [
+          {
+            "destination_node_id": "node-1765730260214",
+            "id": "edge-1765811741245-hbpg184a5",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "The user does not identify as a woman. Therefore, set is_woman = false."
+            }
+          }
+        ],
+        "variables": [
+          {
+            "name": "is_woman",
+            "description": "Whether the user identifies as a woman",
+            "type": "boolean",
+            "choices": []
+          }
+        ],
+        "id": "node-1765811718400",
+        "type": "extract_dynamic_variables",
+        "display_position": {
+          "x": 990.186722644992,
+          "y": 346.0250605097171
+        }
+      },
+      {
+        "name": "Reasoning like it’s your favorite food",
+        "edges": [
+          {
+            "destination_node_id": "node-1765814237520",
+            "id": "edge-1765813984134-0-1k6h71eku",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Wait for users to provide their reasons for liking it as their favorite food."
+            }
+          }
+        ],
+        "id": "node-1765813984134",
+        "type": "conversation",
+        "display_position": {
+          "x": 1784.096706654588,
+          "y": -31.182122327678346
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "Why?"
+        }
+      },
+      {
+        "name": "Extract Variables",
+        "edges": [
+          {
+            "destination_node_id": "node-1765730275696",
+            "id": "edge-1765814237520-0-d5lhf3v9p",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "After the user provides their favorite food reason, extract the food_reason."
+            }
+          }
+        ],
+        "variables": [
           {
             "name": "food_reason",
             "description": "Why it's their favorite food",
@@ -166,11 +237,11 @@
             "choices": []
           }
         ],
-        "id": "node-1765731729954",
+        "id": "node-1765814237520",
         "type": "extract_dynamic_variables",
         "display_position": {
-          "x": 2200,
-          "y": 0
+          "x": 1805.0096261024187,
+          "y": -405.3593358936455
         }
       }
     ],
@@ -188,8 +259,8 @@
       "filter_score": 0.6
     },
     "begin_tag_display_position": {
-      "x": 0,
-      "y": 65
+      "x": 482.23961143441835,
+      "y": 7.526474233718446
     },
     "is_published": false
   }

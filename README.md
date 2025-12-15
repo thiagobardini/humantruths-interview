@@ -2,22 +2,17 @@
 
 A mini voice interview platform that receives webhooks from Retell AI, stores interview data, and displays analytics.
 
+**Live Demo:** https://humantruths-interview.vercel.app/
+
 ---
 
 ## Tech Stack
 
-- **Next.js 15** (App Router, React 19, TypeScript strict mode)
+- **Next.js 16** (App Router, React 19, TypeScript strict mode)
 - **Drizzle ORM** + Supabase Postgres - [Documentation](https://orm.drizzle.team/docs/get-started/supabase-new)
 - **shadcn/ui** + Tailwind CSS v4
 - **Zod** validation - [Documentation](https://zod.dev/?id=objects)
 - **Retell AI** SDK with Conversation Flow
-
----
-
-## Documentation
-
-- [`docs/retell/retell-integration.md`](./docs/retell/retell-integration.md) - How the Retell AI integration works
-- [`docs/retell/retell-agent-config.json`](./docs/retell/retell-agent-config.json) - Full agent configuration
 
 ---
 
@@ -41,9 +36,10 @@ src/
 │   ├── utils/                          → Utility functions
 │   └── validations/retell.ts           → Zod schemas
 docs/
-└── retell/
-    ├── retell-integration.md           → Retell AI integration docs
-    └── retell-agent-config.json        → Agent configuration
+├── retell/
+│   ├── retell-integration.md           → Retell AI integration docs
+│   └── retell-agent-config.json        → Agent configuration
+└── ngrok-setup.md                      → ngrok local testing docs
 ```
 
 ---
