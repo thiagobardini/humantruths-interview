@@ -104,7 +104,7 @@ This is a **local dashboard** to monitor all requests coming through ngrok. It s
 
 Watch Next.js terminal for:
 ```
-✅ Interview saved: [call_id]
+✅ Call saved: [call_id]
 ```
 
 ---

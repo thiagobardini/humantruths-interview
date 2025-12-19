@@ -2,13 +2,13 @@
   "agent_id": "",
   "channel": "voice",
   "last_modification_timestamp": 1765839112186,
-  "agent_name": "HumanTruths-PROD-Blocks",
+  "agent_name": "Voice-AI-Agent",
   "response_engine": {
     "type": "conversation-flow",
     "version": 2,
     "conversation_flow_id": "conversation_flow_2f348073ad9f"
   },
-  "webhook_url": "https://humantruths-interview.vercel.app/api/webhooks/retell",
+  "webhook_url": "https://your-domain.vercel.app/api/webhooks/retell",
   "language": "multi",
   "data_storage_setting": "everything",
   "opt_in_signed_url": false,
@@ -28,12 +28,12 @@
   "conversationFlow": {
     "conversation_flow_id": "conversation_flow_2f348073ad9f",
     "version": 2,
-    "global_prompt": "You are a friendly interviewer conducting a brief 2-minute interview. \n\nYour task:\n1. First, ask if the user is a woman\n2. If they are NOT a woman, politely thank them and end the call\n3. If they ARE a woman, ask: \"What's your favorite food and why?\"\n4. After they answer, thank them and end the call\n\nBe concise and professional. Keep the interview under 2 minutes.\n",
+    "global_prompt": "You are a friendly AI assistant conducting a brief conversation. \n\nYour task:\n1. Ask the user questions based on the conversation flow\n2. Extract relevant information from their responses\n3. Be concise and professional\n\nKeep the conversation focused and engaging.\n",
     "nodes": [
       {
         "instruction": {
           "type": "prompt",
-          "text": "You are conducting a 2-minute test interview. Filter for users who “are women” ."
+          "text": "You are conducting a conversation. Ask the user questions based on the flow."
         },
         "name": "Welcome Node",
         "edges": [

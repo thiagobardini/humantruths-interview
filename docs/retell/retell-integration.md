@@ -1,11 +1,11 @@
 # Retell AI Integration
 
-This document explains how the HumanTruths Interview Platform integrates with Retell AI for voice interviews.
+This document explains how this platform integrates with Retell AI for voice conversations.
 
 ## Overview
 
-We use Retell AI's **Conversation Flow with Blocks** to create structured voice interviews that:
-1. Ask screening questions
+We use Retell AI's **Conversation Flow with Blocks** to create structured voice conversations that:
+1. Ask questions
 2. Branch based on responses
 3. Extract structured data from conversations
 

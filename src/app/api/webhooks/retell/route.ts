@@ -115,7 +115,7 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    console.log(`✅ Interview saved: ${call.call_id}`)
+    console.log(`✅ Call saved: ${call.call_id}`)
 
     // Revalidate dashboard to show fresh data
     revalidatePath('/dashboard')

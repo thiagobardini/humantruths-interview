@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Voice Interview Platform",
-  description: "Retell-integrated voice interview dashboard",
+  title: "Voice AI Analytics",
+  description: "Retell AI webhook receiver with analytics dashboard",
 };
 
 export default function RootLayout({

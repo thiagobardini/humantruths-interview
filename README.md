@@ -1,8 +1,6 @@
-# HumanTruths Interview Platform
+# Voice AI Analytics
 
-A mini voice interview platform that receives webhooks from Retell AI, stores interview data, and displays analytics.
-
-**Live Demo:** https://humantruths-interview.vercel.app/
+A voice AI webhook receiver with analytics dashboard. Receives webhooks from Retell AI, stores conversation data, and displays analytics.
 
 ---
 
@@ -23,10 +21,10 @@ src/
 ├── app/
 │   ├── api/webhooks/retell/route.ts   → Webhook receiver
 │   ├── dashboard/page.tsx              → Analytics dashboard
-│   └── interview/[callId]/page.tsx     → Interview detail view
+│   └── interview/[callId]/page.tsx     → Call detail view
 ├── components/
 │   ├── dashboard/                      → Dashboard components
-│   ├── interview/                      → Interview detail components
+│   ├── interview/                      → Call detail components
 │   └── ui/                             → Reusable UI components
 ├── db/
 │   ├── schema.ts                       → Drizzle schema + types
@@ -77,7 +75,7 @@ RETELL_API_KEY="your_retell_api_key"
 ### Supabase Dashboard
 
 View data directly in:
-- Supabase Dashboard → Table Editor → `interviews` table
+- Supabase Dashboard → Table Editor → `interviews` table (or your configured table name)
 
 ---
 
@@ -87,9 +85,9 @@ Create a Retell AI agent using **Conversation Flow** (not Single Prompt mode):
 
 1. Go to [Retell Dashboard](https://dashboard.retellai.com/) → Agents → Create Agent
 2. Select **Conversation Flow** as the agent type
-3. Configure the interview flow with blocks:
+3. Configure the conversation flow with blocks:
    - **Greeting block** - Welcome message
-   - **Question blocks** - Each interview question
+   - **Question blocks** - Each conversation question
    - **Goodbye block** - Thank you message
 4. Enable **Extract Dynamic Variables** on each question block to capture responses
 5. Register your webhook URL in Agent Settings
@@ -126,7 +124,7 @@ npm run db:studio     # Open Drizzle Studio
 
 The Zod schema matches Retell's nested structure:
 - `event` type at the top level (`call_started`, `call_ended`, `call_analyzed`)
-- `call` object with all the interview data
+- `call` object with all the call data
 - `transcript_object` as an array of messages
 
 ---
@@ -155,15 +153,15 @@ The webhook endpoint does 4 things:
 `src/app/dashboard/page.tsx`
 
 The dashboard shows:
-- **Total interviews** count
+- **Total calls** count
 - **Average duration**
 - **Completion rate**
 - **Question-by-question analytics** - each question, response count, sample answers
-- **Recent interviews list**
+- **Recent calls list**
 
 ---
 
-## Step 8: Interview Detail
+## Step 8: Call Detail
 
 `src/app/interview/[callId]/page.tsx`
 
@@ -195,14 +193,14 @@ ngrok http 3000
 ### Production Webhook URL
 
 ```
-POST https://humantruths-interview.vercel.app/api/webhooks/retell
+POST https://your-domain.vercel.app/api/webhooks/retell
 ```
 
 ### Vercel Logs
 
 After a webhook is received, check logs in:
 - Vercel Dashboard → Your Project → Logs
-- Look for: `✅ Interview saved: [call_id]`
+- Look for: `✅ Call saved: [call_id]`
 
 ---
 
@@ -220,7 +218,7 @@ After a webhook is received, check logs in:
 ## Trade-offs & Assumptions
 
 ### Extract Dynamic Variables vs Transcript Parsing
-Instead of parsing transcripts with regex/AI to extract answers, I used Retell's **Extract Dynamic Variables** feature. This gives us structured data (`is_woman`, `favorite_food`, `food_reason`) directly from the conversation flow.
+Instead of parsing transcripts with regex/AI to extract answers, this project uses Retell's **Extract Dynamic Variables** feature. This gives us structured data directly from the conversation flow.
 
 **Why:** More reliable, no parsing errors, works regardless of how the user phrases their answer.
 
@@ -231,7 +229,7 @@ See: [`docs/retell/retell-integration.md`](./docs/retell/retell-integration.md)
 ### JSON Column for Extracted Variables
 Extracted variables are stored in a JSON column (`extracted_variables`) rather than separate columns.
 
-**Why:** Flexible schema - can add new variables without migrations. Easy to extend for different interview types.
+**Why:** Flexible schema - can add new variables without migrations. Easy to extend for different conversation types.
 
 **Trade-off:** Can't query individual fields with SQL WHERE clauses. For production, consider adding a GIN index or separate columns for frequently queried fields.
 
@@ -261,8 +259,8 @@ The project spec suggested "mock validation," but I implemented **real signature
 
 **Why:** More secure and production-ready. Same amount of code.
 
-### Next.js 15 + React 19
-Used Next.js 15 with React 19 instead of 14+ as specified.
+### Next.js 16 + React 19
+Used Next.js 16 with React 19 instead of 14+ as specified.
 
 **Why:** Latest stable version with improved performance. App Router API is the same.
 
@@ -271,5 +269,5 @@ Used Next.js 15 with React 19 instead of 14+ as specified.
 ## Features
 
 - Webhook receiver for Retell AI call events
-- Interview analytics dashboard
-- Interview detail with transcript view
+- Analytics dashboard
+- Call detail view with transcript

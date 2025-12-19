@@ -26,13 +26,13 @@ export default async function DashboardPage() {
     <div className="min-h-screen bg-background">
       <div className="container max-w-6xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold">Interview Dashboard</h1>
+          <h1 className="text-2xl font-bold">Analytics Dashboard</h1>
           <RefreshButton />
         </div>
 
         {/* Overview Metrics */}
         <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-8">
-          <MetricCard title="Total Interviews" value={totalInterviews} />
+          <MetricCard title="Total Calls" value={totalInterviews} />
           <MetricCard title="Avg Duration" value={avgDuration} suffix="s" />
           <MetricCard title="Completion Rate" value={completionRate} suffix="%" />
         </div>
@@ -40,7 +40,7 @@ export default async function DashboardPage() {
         {/* Question Analytics */}
         <QuestionAnalytics extractedVariables={allInterviews.map(i => i.extractedVariables)} />
 
-        {/* Recent Interviews */}
+        {/* Recent Calls */}
         <InterviewList interviews={allInterviews} />
       </div>
     </div>
