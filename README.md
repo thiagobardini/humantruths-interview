@@ -4,7 +4,9 @@ A voice AI webhook receiver with analytics dashboard. Receives webhooks from Ret
 
 ## Demo Video
 
-<iframe src="https://share.descript.com/embed/MdsgRwxsjsk" width="640" height="360" frameborder="0" allowfullscreen></iframe>
+👉 **[Watch Demo Video](https://share.descript.com/view/MdsgRwxsjsk)**
+
+> Click the link above to watch the step-by-step demo of how the platform works.
 
 ---
 
